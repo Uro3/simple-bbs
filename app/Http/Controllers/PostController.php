@@ -7,7 +7,7 @@ use App\Post;
 
 class PostController extends Controller {
   public function index() {
-    return Post::take(5)->get()->keyBy('id');
+    return Post::take(50)->get()->keyBy('id');
   }
 
   public function store(Request $req) {
