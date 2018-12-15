@@ -12,7 +12,11 @@
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet" type="text/css">
 
     <script>
-      window.Laravel = {csrfToken: "{{ csrf_token() }}"};
+      window.Laravel = {
+        csrfToken: "{{ csrf_token() }}",
+        clientId: "{{ config('passport.client_id') }}",
+        clientSecret: "{{ config('passport.client_secret') }}"
+      };
     </script>
   </head>
   <body>
