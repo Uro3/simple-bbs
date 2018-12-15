@@ -29,10 +29,12 @@
 <script>
 import axios from 'axios';
 export default {
-  data: () => ({
-    form: {},
-    posts: {}
-  }),
+  data: function() {
+    return {
+      form: {},
+      posts: {}
+    }
+  },
   methods: {
     submit: async function() {
       const res = await axios.post('/api/posts', this.form);
