@@ -6,6 +6,11 @@ use Illuminate\Http\Request;
 use App\Post;
 
 class PostController extends Controller {
+
+  public function __construct() {
+    $this->middleware('auth');
+  }
+
   public function index() {
     return Post::take(50)->get()->keyBy('id');
   }
