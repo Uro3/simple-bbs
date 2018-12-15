@@ -27,7 +27,7 @@
 </template>
 
 <script>
-import axios from 'axios';
+import http from '../utils/http';
 export default {
   data: function() {
     return {
@@ -37,20 +37,21 @@ export default {
   },
   methods: {
     submit: async function() {
-      const res = await axios.post('/api/posts', this.form);
+      const res = await http.post('posts', this.form);
       if (res.status === 200) {
         await this.fetch();
         this.form = {};
       }
     },
     remove: async function(id) {
-      const res = await axios.delete(`/api/posts/${id}`);
+      const res = await http.delete(`posts/${id}`);
       if (res.status === 200) {
         await this.fetch();
       }
     },
     fetch: async function() {
-      const res = await axios.get('/api/posts');
+      const res = await http.get('posts');
+      console.log(res);
       if (res.status === 200 && res.data) {
         this.posts = res.data;
       }
