@@ -3,5 +3,6 @@
 use Illuminate\Http\Request;
 
 Route::apiResources([
-  'posts' => 'PostController'
+  'posts' => 'PostController',
+  'users' => 'UserController'
 ]);
