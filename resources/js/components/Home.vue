@@ -26,6 +26,7 @@
       </ul>
     </template>
     <template v-else>
+      <p>ログイン</p>
       <form @submit.prevent="logIn">
         <div class="form-items">
           <span>メールアドレス</span>
@@ -39,6 +40,31 @@
         </div>
         <button type="submit">ログイン</button>
       </form>
+      <hr>
+      <p>サインアップ</p>
+      <form @submit.prevent="signUp">
+        <div class="formItem">
+          <span>名前</span>
+          <br>
+          <input type="text" v-model="signUpAuth.name" required>
+        </div>
+        <div class="formItem">
+          <span>メールアドレス</span>
+          <br>
+          <input type="email" v-model="signUpAuth.email" required>
+        </div>
+        <div class="formItem">
+          <span>パスワード</span>
+          <br>
+          <input type="password" v-model="signUpAuth.password" required>
+        </div>
+        <div class="formItem">
+          <span>パスワードの確認</span>
+          <br>
+          <input type="password" v-model="signUpAuth.password_confirmation" required>
+        </div>
+        <button type="submit">サインアップ</button>
+      </form>
     </template>
   </div>
 </template>
@@ -51,7 +77,8 @@ export default {
     return {
       message: '',
       posts: {},
-      auth: {}
+      auth: {},
+      signUpAuth: {}
     }
   },
   computed: {
@@ -65,6 +92,7 @@ export default {
   methods: {
     ...mapActions('auth', {
       handleLogIn: 'logIn',
+      handleSignUp: 'signUp',
       logOut: 'logOut'
     }),
     ...mapActions('user', [
@@ -97,6 +125,12 @@ export default {
         await this.fetch();
       }
     },
+    signUp: async function() {
+      await this.handleSignUp(this.signUpAuth);
+      if (this.isLoggedIn) {
+        await this.fetch();
+      }
+    }
   },
   mounted: async function() {
     if (this.isLoggedIn) {
