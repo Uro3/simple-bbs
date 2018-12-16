@@ -7,6 +7,32 @@
         <span>{{ userName }}</span>
       </p>
       <button @click="logOut" style="margin-bottom: 1rem;">ログアウト</button>
+      <hr>
+      <form @submit.prevent="makeThread">
+        <div class="formItem">
+          <span>スレッドタイトル</span>
+          <br>
+          <input type="text" v-model="title" required>
+        </div>
+        <div class="formItem">
+          <span>スレッドの説明</span>
+          <br>
+          <textarea v-model="description"></textarea>
+        </div>
+        <button type="submit">スレッドを作成</button>
+      </form>
+      <hr>
+      <ul>
+        <li v-for="(thread, index) in threads" :key="index">
+          <div class="post-item">
+            <span>{{ thread.title }}: {{ thread.description }}</span>
+            <template v-if="thread.id!==currentThread.id">
+              <button type="button" @click="changeThread(thread)">移動</button>
+            </template>
+          </div>
+        </li>
+      </ul>
+      <hr>
       <form @submit.prevent="submit">
         <div class="formItem">
           <span>メッセージ</span>
@@ -76,6 +102,10 @@ export default {
   data: function() {
     return {
       message: '',
+      title: '',
+      description: '',
+      currentThread: {},
+      threads: {},
       posts: {},
       auth: {},
       signUpAuth: {}
@@ -99,25 +129,60 @@ export default {
       'getUserInfo'
     ]),
     submit: async function() {
-      const params = { message: this.message }
+      const params = {
+        thread_id: this.currentThread.id,
+        message: this.message
+      }
       const res = await http.post('/api/posts', params);
       if (res.status === 200) {
-        await this.fetch();
-        this.form = {};
+        await this.getPosts();
+        this.message = '';
       }
     },
     remove: async function(id) {
       const res = await http.delete(`/api/posts/${id}`);
       if (res.status === 200) {
-        await this.fetch();
+        await this.getPosts();
+      }
+    },
+    getPosts: async function() {
+      const params = { thread_id: this.currentThread.id }
+      const res = await http.get('/api/posts', params);
+      if (res.status === 200 && res.data) {
+        this.posts = res.data;
+      }
+    },
+    changeThread: function(thread) {
+      this.currentThread = thread;
+      this.fetch();
+    },
+    makeThread: async function() {
+      const params = {
+        title: this.title,
+        description: this.description
+      };
+      const res = await http.post('/api/threads', params);
+      if (res.status === 200) {
+        await this.getThreads();
+        this.title = '';
+        this.description = '';
+      }
+    },
+    getThreads: async function() {
+      const res = await http.get('/api/threads');
+      if (res.status === 200 && res.data) {
+        this.threads = res.data;
+        if (!Object.keys(this.currentThread).length) {
+          console.log('hey');
+          console.log(this.threads);
+          this.currentThread = this.threads[1];
+        }
       }
     },
     fetch: async function() {
       await this.getUserInfo();
-      const res = await http.get('/api/posts');
-      if (res.status === 200 && res.data) {
-        this.posts = res.data;
-      }
+      await this.getThreads();
+      await this.getPosts();
     },
     logIn: async function() {
       await this.handleLogIn(this.auth);
