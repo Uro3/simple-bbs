@@ -20,11 +20,11 @@
         "pug": "^2.0.3",
         "pug-loader": "^2.4.0",
         "vue": "^2.5.21",
-        "vue-router": "^3.0.1"
+        "vue-router": "^3.0.1",
+        "vue-template-compiler": "^2.5.21"
     },
     "dependencies": {
         "js-cookie": "^2.2.0",
-        "material-design-icons-iconfont": "^4.0.3",
         "vuetify": "^1.3.14",
         "vuex": "^3.0.1"
     }
