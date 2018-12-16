@@ -1,13 +1,17 @@
 <template lang="pug">
   div#root
     v-app
-      h1 hello
+      toolbar
       router-view.container
 </template>
 
 <script>
 import { mapState } from 'vuex';
+import Toolbar from './Toolbar.vue';
 export default {
+  components: {
+    Toolbar
+  },
   computed: {
     ...mapState('auth', {
       isLoggedIn: state => state.isLoggedIn,
