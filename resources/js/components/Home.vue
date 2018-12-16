@@ -2,17 +2,16 @@
   <div class="home">
     <h1>Home</h1>
     <template v-if="isLoggedIn">
+      <p>
+        <span>現在のユーザー：</span>
+        <span>{{ userName }}</span>
+      </p>
       <button @click="logOut" style="margin-bottom: 1rem;">ログアウト</button>
       <form @submit.prevent="submit">
-        <div class="form-items">
-          <span>名前</span>
-          <br>
-          <input v-model="form.name" required>
-        </div>
         <div class="formItem">
           <span>メッセージ</span>
           <br>
-          <textarea v-model="form.message" required></textarea>
+          <textarea v-model="message" required></textarea>
         </div>
         <button type="submit">投稿</button>
       </form>
@@ -50,7 +49,7 @@ import http from '../utils/http';
 export default {
   data: function() {
     return {
-      form: {},
+      message: '',
       posts: {},
       auth: {}
     }
@@ -58,6 +57,9 @@ export default {
   computed: {
     ...mapState('auth', {
       isLoggedIn: state => state.isLoggedIn,
+    }),
+    ...mapState('user', {
+      userName: state => state.name,
     })
   },
   methods: {
@@ -65,8 +67,12 @@ export default {
       handleLogIn: 'logIn',
       logOut: 'logOut'
     }),
+    ...mapActions('user', [
+      'getUserInfo'
+    ]),
     submit: async function() {
-      const res = await http.post('/api/posts', this.form);
+      const params = { message: this.message }
+      const res = await http.post('/api/posts', params);
       if (res.status === 200) {
         await this.fetch();
         this.form = {};
@@ -79,6 +85,7 @@ export default {
       }
     },
     fetch: async function() {
+      await this.getUserInfo();
       const res = await http.get('/api/posts');
       if (res.status === 200 && res.data) {
         this.posts = res.data;
