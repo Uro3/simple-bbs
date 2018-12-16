@@ -4,12 +4,14 @@ Vue.use(Router);
 
 import home from './components/Home.vue';
 import login from './views/Login.vue';
+import signup from './views/Signup.vue';
 
 export default new Router({
   mode: 'history',
   routes: [
     { path: '/', redirect: '/home' },
     { path: '/home', component: home },
-    { path: '/login', component: login }
+    { path: '/login', component: login },
+    { path: '/', component: signup }
   ],
 })
