@@ -2,7 +2,7 @@
   <div class="home">
     <h1>Home</h1>
     <template v-if="isLoggedIn">
-      <button @click="logout" style="margin-bottom: 1rem;">ログアウト</button>
+      <button @click="logOut" style="margin-bottom: 1rem;">ログアウト</button>
       <form @submit.prevent="submit">
         <div class="form-items">
           <span>名前</span>
@@ -27,16 +27,16 @@
       </ul>
     </template>
     <template v-else>
-      <form @submit.prevent="login">
+      <form @submit.prevent="logIn">
         <div class="form-items">
           <span>メールアドレス</span>
           <br>
-          <input type="email" v-model="email" required>
+          <input type="email" v-model="auth.email" required>
         </div>
         <div class="formItem">
           <span>パスワード</span>
           <br>
-          <input type="password" v-model="password" required>
+          <input type="password" v-model="auth.password" required>
         </div>
         <button type="submit">ログイン</button>
       </form>
@@ -45,19 +45,26 @@
 </template>
 
 <script>
-import cookies from 'js-cookie';
+import { mapState, mapActions } from 'vuex';
 import http from '../utils/http';
 export default {
   data: function() {
     return {
       form: {},
       posts: {},
-      isLoggedIn: false,
-      email: '',
-      password: ''
+      auth: {}
     }
   },
+  computed: {
+    ...mapState('auth', {
+      isLoggedIn: state => state.isLoggedIn,
+    })
+  },
   methods: {
+    ...mapActions('auth', {
+      handleLogIn: 'logIn',
+      logOut: 'logOut'
+    }),
     submit: async function() {
       const res = await http.post('/api/posts', this.form);
       if (res.status === 200) {
@@ -77,29 +84,15 @@ export default {
         this.posts = res.data;
       }
     },
-    login: async function() {
-      const res = await http.post('/oauth/token', {
-        'client_id': window.Laravel.clientId,
-        'client_secret': window.Laravel.clientSecret,
-        'username': this.email,
-        'password': this.password,
-        'grant_type': 'password',
-        'scope': ''
-      });
-      if (res.status === 200 && res.data && res.data.access_token) {
-        cookies.set('passport-token', res.data.access_token);
-        this.isLoggedIn = true;
+    logIn: async function() {
+      await this.handleLogIn(this.auth);
+      if (this.isLoggedIn) {
         await this.fetch();
       }
     },
-    logout: function() {
-      cookies.remove('passport-token');
-      this.isLoggedIn = false;
-    }
   },
   mounted: async function() {
-    if (cookies.get('passport-token')) {
-      this.isLoggedIn = true;
+    if (this.isLoggedIn) {
       await this.fetch();
     }
   }
