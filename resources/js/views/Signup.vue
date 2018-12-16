@@ -1,40 +1,43 @@
 <template lang="pug">
-  v-form(ref="form" v-model="valid")
-    v-text-field(
-      v-model="name"
-      :rules="nameRules"
-      :counter="20"
-      label="名前"
-      required
-    )
-    v-text-field(
-      v-model="email"
-      :rules="emailRules"
-      label="メールアドレス"
-      required
-    )
-    v-text-field(
-      v-model="password"
-      :append-icon="showPassword ? 'visibility_off' : 'visibility'"
-      :rules="[passwordRules.required, passwordRules.length]"
-      :type="showPassword ? 'text' : 'password'"
-      label="パスワード"
-      hint="8文字以上"
-      counter
-      @click:append="showPassword = !showPassword"
-    )
-    v-text-field(
-      v-model="passwordConfirmation"
-      :append-icon="showPasswordConfirmation ? 'visibility_off' : 'visibility'"
-      :rules="[passwordRules.required]"
-      :type="showPasswordConfirmation ? 'text' : 'password'"
-      label="パスワードの確認"
-      hint="パスワードをもう一度入力してください"
-      counter
-      @click:append="showPasswordConfirmation = !showPasswordConfirmation"
-    )
-    v-btn(:disabled="!valid" @click="submit") サインアップ
-    v-btn(@click="clear") クリア
+  div#signup
+    v-form(ref="form" v-model="valid")
+      v-text-field(
+        v-model="name"
+        :rules="nameRules"
+        :counter="20"
+        label="名前"
+        required
+      )
+      v-text-field(
+        v-model="email"
+        :rules="emailRules"
+        label="メールアドレス"
+        required
+      )
+      v-text-field(
+        v-model="password"
+        :append-icon="showPassword ? 'visibility_off' : 'visibility'"
+        :rules="[passwordRules.required, passwordRules.length]"
+        :type="showPassword ? 'text' : 'password'"
+        label="パスワード"
+        hint="8文字以上"
+        counter
+        @click:append="showPassword = !showPassword"
+      )
+      v-text-field(
+        v-model="passwordConfirmation"
+        :append-icon="showPasswordConfirmation ? 'visibility_off' : 'visibility'"
+        :rules="[passwordRules.required]"
+        :type="showPasswordConfirmation ? 'text' : 'password'"
+        label="パスワードの確認"
+        hint="パスワードをもう一度入力してください"
+        counter
+        @click:append="showPasswordConfirmation = !showPasswordConfirmation"
+      )
+      v-btn(:disabled="!valid" @click="submit") サインアップ
+      v-btn(@click="clear") クリア
+    div.mt-4
+      router-link(to="/login") ログインはこちら
 </template>
 
 <script>

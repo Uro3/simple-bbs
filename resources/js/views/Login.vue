@@ -1,23 +1,27 @@
 <template lang="pug">
-  v-form(ref="form" v-model="valid")
-    v-text-field(
-      v-model="email"
-      :rules="emailRules"
-      label="メールアドレス"
-      required
-    )
-    v-text-field(
-      v-model="password"
-      :append-icon="showPassword ? 'visibility_off' : 'visibility'"
-      :rules="passwordRules"
-      :type="showPassword ? 'text' : 'password'"
-      label="パスワード"
-      hint="8文字以上"
-      counter
-      @click:append="showPassword = !showPassword"
-    )
-    v-btn(:disabled="!valid" @click="submit") ログイン
-    v-btn(@click="clear") クリア
+  div#login
+    v-form(ref="form" v-model="valid")
+      v-text-field(
+        v-model="email"
+        :rules="emailRules"
+        label="メールアドレス"
+        required
+      )
+      v-text-field(
+        v-model="password"
+        :append-icon="showPassword ? 'visibility_off' : 'visibility'"
+        :rules="passwordRules"
+        :type="showPassword ? 'text' : 'password'"
+        label="パスワード"
+        hint="8文字以上"
+        counter
+        @click:append="showPassword = !showPassword"
+      )
+      v-btn(:disabled="!valid" @click="submit") ログイン
+      v-btn(@click="clear") クリア
+    div.mt-4
+      router-link(to="/signup") サインアップはこちら
+
 </template>
 
 <script>
