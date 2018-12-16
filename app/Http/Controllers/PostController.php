@@ -12,13 +12,18 @@ class PostController extends Controller {
   }
 
   public function index() {
-    return Post::take(50)->get()->keyBy('id');
+    return Post::select('posts.id', 'posts.message', 'users.name')
+      ->join('users','posts.user_id', '=', 'users.id')
+      ->take(50)->get()->keyBy('id');
   }
 
   public function store(Request $req) {
-    if ($req->name && $req->message) {
+    if ($req->message) {
       $post = new Post;
-      $post->fill($req->all())->save();
+      $post->fill([
+        'user_id' => $req->user()->id,
+        'message' => $req->message
+      ])->save();
     }
   }
 
