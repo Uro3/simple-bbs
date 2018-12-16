@@ -2,17 +2,16 @@
   <div class="home">
     <h1>Home</h1>
     <template v-if="isLoggedIn">
+      <p>
+        <span>現在のユーザー：</span>
+        <span>{{ userName }}</span>
+      </p>
       <button @click="logOut" style="margin-bottom: 1rem;">ログアウト</button>
       <form @submit.prevent="submit">
-        <div class="form-items">
-          <span>名前</span>
-          <br>
-          <input v-model="form.name" required>
-        </div>
         <div class="formItem">
           <span>メッセージ</span>
           <br>
-          <textarea v-model="form.message" required></textarea>
+          <textarea v-model="message" required></textarea>
         </div>
         <button type="submit">投稿</button>
       </form>
@@ -27,6 +26,7 @@
       </ul>
     </template>
     <template v-else>
+      <p>ログイン</p>
       <form @submit.prevent="logIn">
         <div class="form-items">
           <span>メールアドレス</span>
@@ -40,6 +40,31 @@
         </div>
         <button type="submit">ログイン</button>
       </form>
+      <hr>
+      <p>サインアップ</p>
+      <form @submit.prevent="signUp">
+        <div class="formItem">
+          <span>名前</span>
+          <br>
+          <input type="text" v-model="signUpAuth.name" required>
+        </div>
+        <div class="formItem">
+          <span>メールアドレス</span>
+          <br>
+          <input type="email" v-model="signUpAuth.email" required>
+        </div>
+        <div class="formItem">
+          <span>パスワード</span>
+          <br>
+          <input type="password" v-model="signUpAuth.password" required>
+        </div>
+        <div class="formItem">
+          <span>パスワードの確認</span>
+          <br>
+          <input type="password" v-model="signUpAuth.password_confirmation" required>
+        </div>
+        <button type="submit">サインアップ</button>
+      </form>
     </template>
   </div>
 </template>
@@ -50,23 +75,32 @@ import http from '../utils/http';
 export default {
   data: function() {
     return {
-      form: {},
+      message: '',
       posts: {},
-      auth: {}
+      auth: {},
+      signUpAuth: {}
     }
   },
   computed: {
     ...mapState('auth', {
       isLoggedIn: state => state.isLoggedIn,
+    }),
+    ...mapState('user', {
+      userName: state => state.name,
     })
   },
   methods: {
     ...mapActions('auth', {
       handleLogIn: 'logIn',
+      handleSignUp: 'signUp',
       logOut: 'logOut'
     }),
+    ...mapActions('user', [
+      'getUserInfo'
+    ]),
     submit: async function() {
-      const res = await http.post('/api/posts', this.form);
+      const params = { message: this.message }
+      const res = await http.post('/api/posts', params);
       if (res.status === 200) {
         await this.fetch();
         this.form = {};
@@ -79,6 +113,7 @@ export default {
       }
     },
     fetch: async function() {
+      await this.getUserInfo();
       const res = await http.get('/api/posts');
       if (res.status === 200 && res.data) {
         this.posts = res.data;
@@ -90,6 +125,12 @@ export default {
         await this.fetch();
       }
     },
+    signUp: async function() {
+      await this.handleSignUp(this.signUpAuth);
+      if (this.isLoggedIn) {
+        await this.fetch();
+      }
+    }
   },
   mounted: async function() {
     if (this.isLoggedIn) {

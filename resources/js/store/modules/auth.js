@@ -32,6 +32,23 @@ const actions = {
       console.error(e);
     }
   },
+  signUp: async ({ dispatch }, params) => {
+    let res;
+    try {
+      // ユーザ認証 & アクセストークン取得
+      res = await http.post('/api/signup', {
+        'name': params.name,
+        'email': params.email,
+        'password': params.password,
+        'password_confirmation': params.password_confirmation
+      });
+    } catch (e) {
+      console.error(e);
+    }
+    if (res && res.status === 200) {
+      await dispatch('logIn', params)
+    }
+  },
   logOut: ({ commit }, params) => {
     // クッキーからトークンを削除
     cookies.remove('passport-token');
