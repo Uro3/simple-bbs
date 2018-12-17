@@ -31,4 +31,8 @@ class ThreadController extends Controller
     }
   }
 
+  public function show($id) {
+    return Thread::find($id);
+  }
+
 }

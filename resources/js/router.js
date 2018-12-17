@@ -5,6 +5,7 @@ Vue.use(Router);
 import home from './views/Home.vue';
 import login from './views/Login.vue';
 import signup from './views/Signup.vue';
+import thread from './views/Thread.vue';
 import threadList from './views/ThreadList.vue';
 
 export default new Router({
@@ -14,6 +15,7 @@ export default new Router({
     { path: '/home', component: home },
     { path: '/login', component: login },
     { path: '/signup', component: signup },
+    { path: '/thread/:threadId', component: thread },
     { path: '/thread-list', component: threadList }
   ],
 })

@@ -15,17 +15,22 @@ class PostController extends Controller {
     return Post::select('posts.id', 'posts.message', 'users.name')
       ->join('users','posts.user_id', '=', 'users.id')
       ->where('posts.thread_id', $req->thread_id)
-      ->take(50)->get()->keyBy('id');
+      ->take(50)->get();
   }
 
   public function store(Request $req) {
     if ($req->message && $req->thread_id) {
       $post = new Post;
-      $post->fill([
+      $done = $post->fill([
         'user_id' => $req->user()->id,
         'thread_id' => $req->thread_id,
         'message' => $req->message
       ])->save();
+      if ($done) {
+        return $post->id;
+      } else {
+        return false;
+      }
     }
   }
 
