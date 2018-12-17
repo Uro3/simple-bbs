@@ -12,9 +12,10 @@ class PostController extends Controller {
   }
 
   public function index(Request $req) {
-    return Post::select('posts.id', 'posts.message', 'users.name')
+    return Post::select('posts.id', 'posts.message', 'users.id AS user_id', 'users.name', 'posts.created_at')
       ->join('users','posts.user_id', '=', 'users.id')
       ->where('posts.thread_id', $req->thread_id)
+      ->orderBy('created_at', 'desc')
       ->take(50)->get();
   }
 

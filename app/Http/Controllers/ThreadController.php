@@ -12,7 +12,9 @@ class ThreadController extends Controller
   }
 
   public function index() {
-    return Thread::take(50)->get();
+    return Thread::select('*')
+      ->orderBy('created_at', 'desc')
+      ->take(50)->get();
   }
 
   public function store(Request $req) {
