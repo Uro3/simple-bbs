@@ -39,7 +39,9 @@ export default {
       };
       const { status, data } = await http.post('/api/threads', params);
       if (status === 200 && data) {
+        this.$refs.form.reset();
         this.$emit('success');
+        this.$router.push(`/thread/${data}`);
       } else {
         this.$emit('failure');
       }
