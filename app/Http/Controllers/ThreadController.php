@@ -12,18 +12,29 @@ class ThreadController extends Controller
   }
 
   public function index() {
-    return Thread::take(50)->get()->keyBy('id');
+    return Thread::select('*')
+      ->orderBy('created_at', 'desc')
+      ->take(50)->get();
   }
 
   public function store(Request $req) {
     if ($req->title) {
       $thread = new Thread;
-      $thread->fill([
+      $done = $thread->fill([
         'owner_id' => $req->user()->id,
         'title' => $req->title,
         'description' => $req->description
       ])->save();
+      if ($done) {
+        return $thread->id;
+      } else {
+        return false;
+      }
     }
+  }
+
+  public function show($id) {
+    return Thread::find($id);
   }
 
 }

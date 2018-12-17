@@ -1,28 +1,26 @@
 <template lang="pug">
   div#home
     p Here is home.
-    v-btn(outline color="indigo" @click="logOut") ログアウト
+    v-btn(large color="primary" @click="move('/thread-list')") スレッド一覧
+    v-btn(large color="primary" @click="showDialog = true") スレッド作成
+    thread-form-dialog(:show='showDialog' @close='showDialog = false')
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex';
+import ThreadFormDialog from '../components/ThreadFormDialog.vue';
 export default {
-  computed: {
-    ...mapState('auth', {
-      isLoggedIn: state => state.isLoggedIn,
-    })
+  components: {
+    ThreadFormDialog
   },
-  watch: {
-    isLoggedIn: function(value) {
-      if (!value) {
-        this.$router.push('/login');
-      }
+  data: function() {
+    return {
+      showDialog: false
     }
   },
   methods: {
-    ...mapActions('auth', {
-      logOut: 'logOut'
-    }),
+    move: function(path) {
+      this.$router.push(path)
+    }
   }
 }
 </script>
