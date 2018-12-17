@@ -21,7 +21,6 @@
       v-btn(@click="clear") クリア
     div.mt-4
       router-link(to="/signup") サインアップはこちら
-
 </template>
 
 <script>
@@ -52,8 +51,12 @@ export default {
     ...mapActions('auth', [
       'logIn'
     ]),
-    transitionToHome: function() {
+    ...mapActions('user', [
+      'getUserInfo'
+    ]),
+    transitionToHome: async function() {
       if (this.isLoggedIn) {
+        await this.getUserInfo()
         this.$router.push('/home');
       }
     },
@@ -63,7 +66,7 @@ export default {
           email: this.email,
           password: this.password
         });
-        this.transitionToHome();
+        await this.transitionToHome();
       }
     },
     clear: function() {
