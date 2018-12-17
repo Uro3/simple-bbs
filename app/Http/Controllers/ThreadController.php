@@ -12,7 +12,7 @@ class ThreadController extends Controller
   }
 
   public function index() {
-    return Thread::take(50)->get()->keyBy('id');
+    return Thread::take(50)->get();
   }
 
   public function store(Request $req) {
