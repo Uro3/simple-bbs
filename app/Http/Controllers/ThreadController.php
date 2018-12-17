@@ -18,11 +18,16 @@ class ThreadController extends Controller
   public function store(Request $req) {
     if ($req->title) {
       $thread = new Thread;
-      $thread->fill([
+      $done = $thread->fill([
         'owner_id' => $req->user()->id,
         'title' => $req->title,
         'description' => $req->description
       ])->save();
+      if ($done) {
+        return $thread->id;
+      } else {
+        return false;
+      }
     }
   }
 

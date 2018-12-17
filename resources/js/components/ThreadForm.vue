@@ -38,8 +38,8 @@ export default {
         title: this.title,
         description: this.description
       };
-      const { status } = await http.post('/api/threads', params);
-      if (status === 200) {
+      const { status, data } = await http.post('/api/threads', params);
+      if (status === 200 && data) {
         this.$emit('success');
       } else {
         this.$emit('failure');
