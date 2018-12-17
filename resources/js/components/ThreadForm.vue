@@ -13,7 +13,7 @@
         label="説明"
         required
       )
-      v-btn(:disabled="!valid" @click="submit") ログイン
+      v-btn(:disabled="!valid" @click="submit") 作成
       v-btn(@click="clear") クリア
 </template>
 
@@ -26,7 +26,6 @@ export default {
       valid: false,
       title: '',
       description: '',
-      showPassword: false,
       rules: [
         v => !!v || '必須項目です。'
       ]

@@ -3,7 +3,7 @@
     v-dialog(v-model="show" persistent max-width="600px")
       v-card
         v-card-title
-          span.headline User Profile
+          span.headline スレッドを作成
         v-card-text
           thread-form(@success="$emit('close')")
         v-card-actions
