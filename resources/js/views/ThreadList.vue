@@ -14,7 +14,13 @@
       v-card(color="indigo lighten-5" transition="slide-y-transition")
         v-card-text
           thread-form(:threadId="threadId" @success="fetch()")
-    v-list.mt-5
+    div.mt-5.text-xs-center
+      v-pagination(
+        v-model="currentPage"
+        :length="lastPage"
+        :total-visible="7"
+      )
+    v-list.mt-3
       template(v-for="(thread, index) in threads")
         v-list-tile(:key="index" @click="moveThread(thread.id)")
           v-list-tile-content
@@ -33,14 +39,18 @@ export default {
   data: function() {
     return {
       threads: [],
-      showForm: false
+      showForm: false,
+      currentPage: 1,
+      lastPage: 1
     }
   },
   methods: {
     fetch: async function() {
-      const { status, data } = await http.get('/api/threads');
+      const params = { page: this.currentPage }
+      const { status, data } = await http.get('/api/threads', params);
       if (status === 200 && data) {
-        this.threads = data;
+        this.threads = data.data;
+        this.lastPage = data.last_page;
       }
     },
     moveHome: function() {
@@ -48,6 +58,11 @@ export default {
     },
     moveThread: function(id) {
       this.$router.push(`/thread/${id}`);
+    }
+  },
+  watch: {
+    currentPage: function() {
+      this.fetch()
     }
   },
   created: async function() {

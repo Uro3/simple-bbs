@@ -16,7 +16,7 @@ class PostController extends Controller {
       ->join('users','posts.user_id', '=', 'users.id')
       ->where('posts.thread_id', $req->thread_id)
       ->orderBy('created_at', 'desc')
-      ->take(50)->get();
+      ->paginate(25);
   }
 
   public function store(Request $req) {

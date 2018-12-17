@@ -16,7 +16,13 @@
       v-card(color="indigo lighten-5" transition="slide-y-transition")
         v-card-text
           post-form(:threadId="threadId" @success="getPosts()")
-    v-list.mt-5
+    div.mt-5.text-xs-center
+      v-pagination(
+        v-model="currentPage"
+        :length="lastPage"
+        :total-visible="7"
+      )
+    v-list.mt-3
       template(v-for="(post, index) in posts")
         v-list-tile(:key="index")
           v-list-tile-content
@@ -37,7 +43,9 @@ export default {
       threadId: this.$route.params.threadId,
       thread: {},
       posts: [],
-      showForm: false
+      showForm: false,
+      currentPage: 1,
+      lastPage: 1
     }
   },
   methods: {
@@ -48,10 +56,14 @@ export default {
       }
     },
     getPosts: async function() {
-      const params = { thread_id: this.threadId }
+      const params = {
+        thread_id: this.threadId,
+        page: this.currentPage
+      }
       const { status, data } = await http.get('/api/posts', params);
       if (status === 200 && data) {
-        this.posts = data;
+        this.posts = data.data;
+        this.lastPage = data.last_page;
       }
     },
     fetch: async function() {
@@ -60,6 +72,11 @@ export default {
     },
     move: function(id) {
       this.$router.push(`/thread-list`);
+    }
+  },
+  watch: {
+    currentPage: function() {
+      this.getPosts()
     }
   },
   created: async function() {
