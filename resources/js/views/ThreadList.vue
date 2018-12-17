@@ -1,7 +1,7 @@
 <template lang="pug">
   div#thread-list
     h2 スレッド一覧
-    v-container(fluid)
+    v-container.text-xs-center(fluid)
       v-layout( justify-space-between row)
         v-flex(xs3)
           v-btn(color="primary" @click="moveHome()")

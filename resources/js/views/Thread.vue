@@ -1,12 +1,12 @@
 <template lang="pug">
   div#thread
-    v-card()
+    v-card
       v-card-title.headline {{ thread.title }}
       v-card-text.body-2 {{ thread.description }}
-    v-container(fluid)
+    v-container.text-xs-center(fluid)
       v-layout( justify-space-between row)
         v-flex(xs3)
-          v-btn(color="primary" @click="move()")
+          v-btn(color="primary" @click="move")
             span スレッド一覧
         v-flex(xs3)
           v-btn(color="primary" @click="showForm = !showForm")
