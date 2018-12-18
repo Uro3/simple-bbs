@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapState, mapActions } from 'vuex';
 import Toolbar from './Toolbar.vue';
 export default {
   components: {
@@ -15,13 +15,23 @@ export default {
   computed: {
     ...mapState('auth', {
       isLoggedIn: state => state.isLoggedIn,
+    }),
+    ...mapState('user', {
+      userName: state => state.name,
     })
+  },
+  methods: {
+    ...mapActions('user', [
+      'getUserInfo'
+    ])
   },
   created: function() {
     if (!this.isLoggedIn) {
       if (!/^\/(signup|login)$/.test(window.location.pathname)) {
         this.$router.push('/login');
       }
+    } else if (!this.userName) {
+      this.getUserInfo();
     }
   }
 }
