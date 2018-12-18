@@ -1,7 +1,10 @@
 import axios from 'axios';
 import cookies from 'js-cookie';
 
+const dev = process.env.NODE_ENV !=='production';
+
 const httpClient = axios.create({
+  baseURL: dev ? '/' : '/event2018/miyakawa/',
   headers: {
     'X-CSRF-TOKEN': window.Laravel.csrfToken,
     'Content-Type': 'application/json',
