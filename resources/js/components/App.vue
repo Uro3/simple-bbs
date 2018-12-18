@@ -33,7 +33,6 @@ export default {
       'getUserInfo'
     ]),
     toggleNav: function(event) {
-      console.log(event);
       this.showNav = event;
     }
   },
