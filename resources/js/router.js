@@ -8,8 +8,11 @@ import signup from './views/Signup.vue';
 import thread from './views/Thread.vue';
 import threadList from './views/ThreadList.vue';
 
+const dev = process.env.NODE_ENV !=='production';
+
 export default new Router({
   mode: 'history',
+  base: dev ? '/' : '/event2018/miyakawa',
   routes: [
     { path: '/', redirect: '/home' },
     { path: '/home', component: home },
