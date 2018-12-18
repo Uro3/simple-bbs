@@ -2,19 +2,19 @@
   div#thread-list
     h2 スレッド一覧
     v-container.text-xs-center(fluid)
-      v-layout( justify-space-between row)
-        v-flex(xs3)
+      v-layout(justify-space-between row)
+        v-flex(xs4)
           v-btn(color="primary" @click="moveHome()")
             span ホーム
-        v-flex(xs3)
+        v-flex(xs4)
           v-btn(color="primary" @click="showForm = !showForm")
             span(v-if="!showForm") 新規作成
             span(v-else) 閉じる
     template(v-if="showForm")
-      v-card(color="indigo lighten-5" transition="slide-y-transition")
+      v-card.mb-5(color="indigo lighten-5" transition="slide-y-transition")
         v-card-text
-          thread-form(:threadId="threadId" @success="fetch()")
-    div.mt-5.text-xs-center
+          thread-form(@success="fetch()")
+    div.text-xs-center
       v-pagination(
         v-model="currentPage"
         :length="lastPage"
