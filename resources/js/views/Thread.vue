@@ -2,7 +2,8 @@
   div#thread
     v-card
       v-card-title.headline {{ thread.title }}
-      v-card-text.body-2 {{ thread.description }}
+      v-card-text.body-2.py-2 {{ thread.description }}
+      v-card-text.caption.py-2 スレッド主：{{ thread.owner_name }}
     v-container.text-xs-center(fluid)
       v-layout( justify-space-between row)
         v-flex(xs4)
