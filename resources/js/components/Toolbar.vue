@@ -1,14 +1,9 @@
 <template lang="pug">
   v-toolbar(color="indigo" dark)
-    v-toolbar-title.font-weight-black(@click="moveHome") 弐番
+    v-toolbar-side-icon(@click.stop="$emit('draw')")
+    v-toolbar-title.font-weight-black 弐番
     v-spacer
-    v-menu(v-if="isLoggedIn" offset-y)
-      v-icon(slot="activator" large) account_circle
-      v-list
-        v-list-tile(@click="moveHome")
-          v-list-tile-title 設定
-        v-list-tile(@click="logOut")
-          v-list-tile-title ログアウト
+    v-toolbar-title(v-if="isLoggedIn") {{ userName }}
 </template>
 
 <script>
@@ -18,6 +13,9 @@ export default {
   computed: {
     ...mapState('auth', {
       isLoggedIn: state => state.isLoggedIn,
+    }),
+    ...mapState('user', {
+      userName: state => state.name,
     })
   },
   watch: {
@@ -25,14 +23,6 @@ export default {
       if (!value) {
         this.$router.push('/login');
       }
-    }
-  },
-  methods: {
-    ...mapActions('auth', {
-      logOut: 'logOut'
-    }),
-    moveHome: function() {
-      this.$router.push('/home');
     }
   }
 }
