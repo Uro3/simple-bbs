@@ -2,21 +2,22 @@
   div#thread
     v-card
       v-card-title.headline {{ thread.title }}
-      v-card-text.body-2 {{ thread.description }}
+      v-card-text.body-2.py-2 {{ thread.description }}
+      v-card-text.caption.py-2 スレッド主：{{ thread.owner_name }}
     v-container.text-xs-center(fluid)
       v-layout( justify-space-between row)
-        v-flex(xs3)
+        v-flex(xs4)
           v-btn(color="primary" @click="move")
             span スレッド一覧
-        v-flex(xs3)
+        v-flex(xs4)
           v-btn(color="primary" @click="showForm = !showForm")
             span(v-if="!showForm") 新規投稿
             span(v-else) 閉じる
     template(v-if="showForm")
-      v-card(color="indigo lighten-5" transition="slide-y-transition")
+      v-card.mb-5(color="indigo lighten-5" transition="slide-y-transition")
         v-card-text
           post-form(:threadId="threadId" @success="getPosts()")
-    div.mt-5.text-xs-center
+    div.text-xs-center
       v-pagination(
         v-model="currentPage"
         :length="lastPage"

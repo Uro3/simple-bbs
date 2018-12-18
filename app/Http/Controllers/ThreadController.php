@@ -34,7 +34,8 @@ class ThreadController extends Controller
   }
 
   public function show($id) {
-    return Thread::find($id);
+    return Thread::select('threads.id', 'threads.title', 'threads.description', 'users.name AS owner_name', 'threads.created_at', 'threads.updated_at')
+      ->join('users','threads.owner_id', '=', 'users.id')->find($id);
   }
 
 }
