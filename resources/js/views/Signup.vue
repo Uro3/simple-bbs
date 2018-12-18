@@ -75,8 +75,12 @@ export default {
     ...mapActions('auth', [
       'signUp'
     ]),
-    transitionToHome: function() {
+    ...mapActions('user', [
+      'getUserInfo'
+    ]),
+    transitionToHome: async function() {
       if (this.isLoggedIn) {
+        await this.getUserInfo();
         this.$router.push('/home');
       }
     },
