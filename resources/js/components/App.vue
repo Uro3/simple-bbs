@@ -42,8 +42,13 @@ export default {
       if (!/^\/(signup|login)$/.test(window.location.pathname)) {
         this.$router.push('/login');
       }
-    } else if (!this.userName) {
-      this.getUserInfo();
+    } else {
+      if (!this.userName) {
+        this.getUserInfo();
+      }
+      if (/^\/(signup|login)$/.test(window.location.pathname)) {
+        this.$router.push('/home');
+      }
     }
   }
 }
