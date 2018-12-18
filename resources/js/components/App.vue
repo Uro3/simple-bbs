@@ -1,16 +1,24 @@
 <template lang="pug">
   div#root
     v-app
-      toolbar
+      navigation(:show="showNav" @change="toggleNav($event)")
+      toolbar(@draw="showNav = !showNav")
       router-view.container
 </template>
 
 <script>
 import { mapState, mapActions } from 'vuex';
+import Navigation from './Navigation.vue';
 import Toolbar from './Toolbar.vue';
 export default {
   components: {
+    Navigation,
     Toolbar
+  },
+  data: function() {
+    return {
+      showNav: false
+    }
   },
   computed: {
     ...mapState('auth', {
@@ -23,7 +31,11 @@ export default {
   methods: {
     ...mapActions('user', [
       'getUserInfo'
-    ])
+    ]),
+    toggleNav: function(event) {
+      console.log(event);
+      this.showNav = event;
+    }
   },
   created: function() {
     if (!this.isLoggedIn) {
